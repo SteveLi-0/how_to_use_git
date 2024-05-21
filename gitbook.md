@@ -154,7 +154,88 @@ git branch -d <name>
 
 # 冲突
 
-存在冲突的条件是需要待合并的两个分支在分开后各自有提交
+存在冲突的条件是需要待合并的两个分支在分开后同一文件各自有提交
 
 # 分支管理
+
+在不同branch merge的时候，如果是默认fast forward的模式，将看不过开发的dev分支。
+
+可以手动指定no ff模式，合并之后可以保留不同分支合并的历史记录。
+
+```
+git merge --no-ff -m "merge with no-ff" dev
+
+git log --graph --pretty=oneline --abbrev-commit
+*   e1e9c68 (HEAD -> master) merge with no-ff
+|\  
+| * f52c633 (dev) add merge
+|/  
+*   cf810e4 conflict fixed
+...
+```
+
+# bug分支 & stash & cherry-pick
+
+新功能
+
+- stash
+- cherry-pick
+
+当拉出bug分支，但是本地dev分支没法提交时，可以使用stash暂存。
+
+```
+# 无论工作区的内容是否提交到暂存区，stash都可以暂时保存
+# stash后的工作区是干净的
+git stash
+
+# 列出stash内容
+git stash list
+# stash@{0}: WIP on dev: f52c633 add merge
+
+# 恢复
+# pop 恢复的同时把stash内容也删了
+git stash pop
+
+# apply 恢复后，stash内容并不删除
+git stash apply stash@{0}
+```
+
+修复bug的过程，注意此时提交修改bug的id是**4c805e2**
+
+```
+git checkout master
+git checkout -b issue-101
+# fix bug
+git add .
+git commit -m 'fix bug 101'
+
+[issue-101 4c805e2] fix bug 101
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+ 
+git switch master
+git merge --no-ff -m 'merge fix bug 101' issue-101
+```
+
+切换回开发分支dev
+
+```
+git switch dev
+git stash list
+git stash pop
+```
+
+master存在的bug，dev上可能也存在。如果不手动修改dev分支上的对应内容，需要cherry-pick 复制一个特定的提交到当前分支。
+
+修复bug的提交是 **4c805e2**  所以只需要在dev上应用一次  **4c805e2** 的修改就可以了。
+
+cherry-pick自动为dev提交一次，提交了dev分支上的bug修改。
+
+```
+$ git branch
+* dev
+  master
+$ git cherry-pick 4c805e2
+[master 1d4b803] fix bug 101
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+```
 
