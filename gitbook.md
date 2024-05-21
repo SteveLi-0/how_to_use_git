@@ -110,8 +110,26 @@ https://www.liaoxuefeng.com/wiki/896043488029600/898732864121440
 git remote add origin git@github.com:SteveLi-0/how_to_use_git.git
 git branch -M main
 git push -u origin main
+
+git push origin master
+
 ```
 
 
 
-## 
+# 分支管理
+
+每次提交，Git都把它们串成一条时间线，这条时间线就是一个分支。截止到目前，只有一条时间线，在Git里，这个分支叫主分支，即`master`分支。`HEAD`严格来说不是指向提交，而是指向`master`，`master`才是指向提交的，所以，`HEAD`指向的就是当前分支。
+
+```
+# 创建dev分支，然后切换到dev分支
+git checkout -b dev
+# git checkout -b dev 等价于
+git branch dev
+git checkout dev
+
+# 查看当前分支
+git branch
+
+```
+
