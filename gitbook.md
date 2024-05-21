@@ -115,7 +115,9 @@ git push origin master
 
 ```
 
+push到远程仓库时，如果本地master不是基于最新版本修改，需要pull下来merge在push
 
+常见于修改了网页端的readme，导致push不上去，具体解决方法见后文。
 
 # 分支管理
 
@@ -149,4 +151,10 @@ git merge <name>
 git branch -d <name>
 
 ```
+
+# 冲突
+
+存在冲突的条件是需要待合并的两个分支在分开后各自有提交
+
+# 分支管理
 
